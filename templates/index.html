@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <style>
+        /* Add your CSS here */
+    </style>
+</head>
+<body>
+    <canvas id="board" width="600" height="600"></canvas>
+    <select id="color">
+        <option value="black">Black</option>
+        <option value="white">White</option>
+    </select>
+    <button id="endGame">End Game</button>
+    <h3 id="score">Black: 0 | White: 0</h3>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        var canvas = document.getElementById('board');
+        var context = canvas.getContext('2d');
+        var colorSelect = document.getElementById('color');
+        var color = colorSelect.value;
+        var blackScore = 0;
+        var whiteScore = 0;
+
+        // Draw the Go board
+        for (var x = 0; x <= 600; x += 30) {
+            for (var y = 0; y <= 600; y += 30) {
+                context.moveTo(x, 0);
+                context.lineTo(x, 600);
+                context.stroke();
+
+                context.moveTo(0, y);
+                context.lineTo(600, y);
+                context.stroke();
+            }
+        }
+
+        // Update color when selection changes
+        colorSelect.addEventListener('change', function() {
+            color = colorSelect.value;
+        });
+
+        // Handle click event to place a stone
+        canvas.addEventListener('click', function(event) {
+            var x = Math.round((event.pageX - canvas.offsetLeft) / 30) * 30;
+            var y = Math.round((event.pageY - canvas.offsetTop) / 30) * 30;
+
+            context.beginPath();
+            context.arc(x, y, 15, 0, 2 * Math.PI, false);
+            context.fillStyle = color;
+            context.fill();
+
+            if (color === 'white') {
+                context.strokeStyle = 'grey';
+                context.lineWidth = 2;
+                context.stroke();
+            }
+
+            socket.emit('place_stone', {'x': x, 'y': y, 'color': color});
+        });
+
+        document.getElementById('endGame').addEventListener('click', function() {
+            socket.emit('end_game');
+        });
+
+        socket.on('update_score', function(score) {
+            blackScore = score.black;
+            whiteScore = score.white;
+            document.getElementById('score').textContent = `Black: ${blackScore} | White: ${whiteScore}`;
+        });
+
+    </script>
+</body>
+</html>

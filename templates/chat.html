@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <style>
+        /* Add your CSS here */
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <ul id="messages"></ul>
+        <form id="send-message">
+            <input type="text" id="message" autocomplete="off">
+            <button>Send</button>
+        </form>
+    </div>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        document.getElementById('send-message').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var message = document.getElementById('message').value;
+
+            socket.emit('send_message', message);
+            document.getElementById('message').value = '';
+        });
+
+        socket.on('receive_message', function(message) {
+            var li = document.createElement('li');
+            li.textContent = message;
+            document.getElementById('messages').appendChild(li);
+        });
+    </script>
+</body>
+</html>

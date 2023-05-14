@@ -1,0 +1,33 @@
+# Go Board Game
+
+This is a two-player online Go board game that allows players to play against each other via the internet.
+
+## Description
+
+The project consists of a client-side HTML interface and a server-side Python backend using Flask and Flask-SocketIO for real-time communication.
+
+Players can place stones on the Go board by clicking on the intersections. The game enforces basic rules such as territory control, stone capture, and scoring.
+
+## Installation
+
+1. Clone the repository: `git clone <repository-url>`
+2. Install the required dependencies: `pip install -r requirements.txt`
+3. Run the server: `python server.py`
+4. Access the game in your web browser at `http://localhost:5000`
+
+## TODO
+
+- [ ] Implement additional Go game rules such as ko rule and seki.
+- [ ] Improve the user interface with more styling and visual enhancements.
+- [ ] Implement an undo move feature to allow players to revert their last move.
+- [ ] Add a timer feature to enforce time limits for each player's turn.
+- [ ] Implement a chat functionality to allow players to communicate during the game.
+- [ ] Add user authentication to track individual player statistics and match history.
+- [ ] Implement an AI opponent for single-player mode.
+- [ ] Write comprehensive unit tests to ensure the correctness of the game logic.
+- [ ] Optimize the code and improve performance where necessary.
+- [ ] Update the documentation and add usage examples.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
